@@ -1,7 +1,10 @@
 var exceptionTrackerControllers = angular.module('exceptionTrackerControllers', []);
 
 
-exceptionTrackerControllers.controller('MenuController', ['$scope', '$location', function ($scope, $location) {
+exceptionTrackerControllers.controller('MenuController', ['$scope', '$location','$route', function ($scope, $location, $route) {
+
+    $scope.currentRoute = $route.current;
+
     $scope.showUsers = function () {
         $location.path('/users');
     };

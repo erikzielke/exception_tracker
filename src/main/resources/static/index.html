@@ -23,11 +23,13 @@
 <body>
 
 <div class="container" ng-controller="MenuController">
+    <h1>{{$route.current.menuItem}}</h1>
     <ul class="nav nav-pills">
-        <li><a ng-click="showExceptions()">Exceptions</a></li>
-        <li><a ng-click="showProjects()">Projects</a></li>
-        <li><a ng-click="showUsers()">Users</a></li>
-        <li><a ng-click="showSettings()">Settings</a></li>
+
+        <li active-link="Exceptions"><a ng-click="showExceptions()">Exceptions</a></li>
+        <li active-link="Projects"><a ng-click="showProjects()" >Projects</a></li>
+        <li active-link="Users"><a ng-click="showUsers()" >Users</a></li>
+        <li active-link="Settings"><a ng-click="showSettings()" >Settings</a></li>
     </ul>
 
     <div  style="margin-top: 1em" ng-view></div>
