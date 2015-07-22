@@ -23,6 +23,7 @@ public class IncomingException {
     private String lineNumber;
     private String fileName;
     private Date processed;
+    private String revision;
 
     public Long getId() {
         return id;
@@ -104,6 +105,14 @@ public class IncomingException {
         this.processed = processed;
     }
 
+    public String getRevision() {
+        return revision;
+    }
+
+    public void setRevision(String revision) {
+        this.revision = revision;
+    }
+
     public static IncomingException fromDto(IncomingExceptionDto incomingExceptionDto) {
         IncomingException incomingException = new IncomingException();
         incomingException.message = incomingExceptionDto.getMessage();
@@ -113,6 +122,7 @@ public class IncomingException {
         incomingException.methodName = incomingExceptionDto.getMethodName();
         incomingException.lineNumber = incomingExceptionDto.getLineNumber();
         incomingException.fileName = incomingExceptionDto.getFileName();
+        incomingException.revision = incomingExceptionDto.getRevision();
         return incomingException;
     }
 

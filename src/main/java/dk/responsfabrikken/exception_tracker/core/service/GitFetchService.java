@@ -43,7 +43,7 @@ public class GitFetchService {
                 } else {
                     try {
                         Git git = new Git(new FileRepository(new File(file, ".git")));
-                        git.fetch().call();
+                        git.pull().call();
                     } catch (IOException | GitAPIException e) {
                         e.printStackTrace();
                     }
@@ -60,7 +60,12 @@ public class GitFetchService {
             FileRepository repo = new FileRepository(new File(workingDir, ".git"));
             Git git = new Git(repo);
             Repository repository = git.getRepository();
-            ObjectId lastCommitId = repository.resolve(Constants.HEAD);
+            ObjectId lastCommitId;
+            if (one.getRevision() != null) {
+                lastCommitId = repository.resolve(one.getRevision());
+            } else {
+                lastCommitId = repository.resolve(Constants.HEAD);
+            }
             RevWalk revWalk = new RevWalk(repository);
             RevCommit commit = revWalk.parseCommit(lastCommitId);
             RevTree tree = commit.getTree();

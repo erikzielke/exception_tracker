@@ -25,6 +25,7 @@ public class ExceptionGroup {
     private User assignee;
     @OneToMany(mappedBy = "exceptionGroup")
     private List<Comment> comments;
+    private String revision;
 
     public ExceptionGroup() {
         logs = new ArrayList<>();
@@ -125,5 +126,13 @@ public class ExceptionGroup {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public String getRevision() {
+        return revision;
+    }
+
+    public void setRevision(String revision) {
+        this.revision = revision;
     }
 }

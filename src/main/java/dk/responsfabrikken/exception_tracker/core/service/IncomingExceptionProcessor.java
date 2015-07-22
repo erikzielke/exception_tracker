@@ -47,13 +47,17 @@ public class IncomingExceptionProcessor {
             exceptionGroup.setFileName(incomingException.getFileName());
             exceptionGroup.setClassName(incomingException.getClassName());
             exceptionGroup.setExceptionGroupStatus(ExceptionGroupStatus.UNRESOLVED);
+            exceptionGroup.setRevision(incomingException.getRevision());
             exceptionGroupRepository.save(exceptionGroup);
             for (NewExceptionGroupListener newExceptionGroupListener : exceptionGroupListeners.getListeners()) {
                 newExceptionGroupListener.onNewExceptionGroupAdded(exceptionGroup);
             }
         } else {
+            exceptionGroup.setRevision(incomingException.getRevision());
             exceptionGroup.setExceptionGroupStatus(ExceptionGroupStatus.UNRESOLVED);
+            exceptionGroupRepository.save(exceptionGroup);
         }
+
         ExceptionLog exceptionLog = new ExceptionLog();
         exceptionLog.setExceptionGroup(exceptionGroup);
         exceptionLog.setTimestamp(incomingException.getTimestamp());

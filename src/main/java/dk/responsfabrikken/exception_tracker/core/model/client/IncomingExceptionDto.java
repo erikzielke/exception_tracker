@@ -8,6 +8,7 @@ public class IncomingExceptionDto {
     private String methodName;
     private String lineNumber;
     private String fileName;
+    private String revision;
 
 
     public String getMessage() {
@@ -64,5 +65,13 @@ public class IncomingExceptionDto {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public String getRevision() {
+        return revision;
+    }
+
+    public void setRevision(String revision) {
+        this.revision = revision;
     }
 }
