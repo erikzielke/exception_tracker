@@ -1,11 +1,17 @@
 <div class="row">
     <div ng-repeat="exceptionGroup in exceptionGroups" class="exceptionGroup" ng-click="showException(exceptionGroup)">
-        <span class="name">{{exceptionGroup.message}}</span>
-        <div>{{exceptionGroup.resolved ? 'Resolved' : 'Unresolved'}}</div>
-        <div class="count">{{exceptionGroup.count}}</div>
-        <div class="project">{{exceptionGroup.project}}</div>
-        <div>{{exceptionGroup.lastSeen}}</div>
-        <div>{{exceptionGroup.assigneeName || 'Unassigned' }}</div>
+        <div class="name">{{exceptionGroup.message}}</div>
+
+        <div class="pull-left">
+            <div>{{exceptionGroup.resolved ? 'Resolved' : 'Unresolved'}}</div>
+            <div class="project">{{exceptionGroup.project}}</div>
+            <div>{{exceptionGroup.assigneeName || 'Unassigned' }}</div>
+        </div>
+        <div class="pull-right" style="display: inline-block">
+            <div class="count">{{exceptionGroup.count}}</div>
+            <div class="clearfix"></div>
+            <div class="time" am-time-ago="exceptionGroup.lastSeen"></div>
+        </div>
         <div class="clearfix"></div>
     </div>
 </div>

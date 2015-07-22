@@ -7,7 +7,7 @@
     </thead>
     <tbody>
     <tr ng-repeat="log in exceptionLogs" ng-click="showLog(log)" >
-        <td>{{log.timestamp}}</td>
+        <td><span am-time-ago="log.timestamp"></span></td>
     </tr>
     </tbody>
 </table>

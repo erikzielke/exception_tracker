@@ -1,0 +1,88 @@
+@main-color: #f2f6fc;
+@border-color: #6ba6e1;
+@border-rad: 5px;
+
+body {
+  padding: 1em;
+  background-color: #f0f0f0;
+}
+
+.exceptionGroup {
+  background-color: @main-color;
+  padding: 5px;
+  margin-bottom: 10px;
+  border: 1px solid @border-color;
+  border-radius: @border-rad;
+  cursor: pointer;
+
+  .name {
+    font-weight: bold;
+  }
+  .count {
+    float: right;
+    text-align: right;
+    font-size: x-large;
+  }
+
+  .time {
+    float: right;
+  }
+
+  &:hover {
+    border-color: black;
+  }
+}
+
+.exceptionGroupFull {
+  background-color: @main-color;
+  padding: 5px;
+  border-radius: @border-rad;
+  border: 1px solid @border-color;
+
+  .exceptionGroupFull .field {
+    font-weight: bold;
+  }
+
+}
+
+.name {
+  font-size: larger;
+  font-weight: bold;
+}
+
+
+.field_container {
+  margin-top: 10px;
+
+  .field {
+    font-weight: bold;
+  }
+}
+
+.exceptionGroupStackTrace {
+  border-radius: @border-rad;
+  margin-top: 20px;
+  background: @main-color;
+  padding: 5px;
+  border: 1px solid @border-color;
+}
+
+.projectListItem {
+  margin-top: 20px;
+  background: @main-color;
+  padding: 5px;
+  border: 1px solid @border-color;
+  border-radius: @border-rad;
+  cursor: pointer;
+
+
+  .name {
+    font-weight: bold;
+  }
+
+  &:hover {
+    border-color: black;
+  }
+
+}
+

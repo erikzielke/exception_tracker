@@ -53,7 +53,7 @@
     <tbody>
     <tr ng-repeat="comment in exceptionGroup.comments">
         <td>{{comment.username}}</td>
-        <td>{{comment.commentDate}}</td>
+        <td><span am-time-ago="comment.commentDate"></span></td>
         <td>{{comment.commentText}}</td>
     </tr>
     </tbody>
