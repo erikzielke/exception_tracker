@@ -1,0 +1,22 @@
+<h1>{{project.name}}</h1>
+
+<h2>Source repository</h2>
+<form>
+    <div class="form-group">
+        <label for="repositoryUrl">Repository url</label>
+        <input type="text" class="form-control" id="repositoryUrl" name="repositoryUrl" ng-model="project.repositoryUrl" />
+    </div>
+    <div class="form-group">
+        <label for="repositoryUsername">Username</label>
+        <input type="text" class="form-control" id="repositoryUsername" name="repositoryUsername"
+               ng-model="project.repositoryUsername"/>
+    </div>
+    <div class="form-group">
+        <label for="repositoryPassword">Password</label>
+        <input type="text" class="form-control" id="repositoryPassword" name="repositoryPassword"
+               ng-model="project.repositoryPassword"/>
+    </div>
+
+    <button class="btn btn-default" type="button" ng-click="saveProjectSettings()">Save</button>
+
+</form>

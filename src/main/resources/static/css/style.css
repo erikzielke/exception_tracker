@@ -1,0 +1,60 @@
+body {
+    padding: 1em;
+}
+
+.exceptionGroup {
+    background-color: #b9def0;
+    padding: 5px;
+    margin-bottom: 10px;
+    border: 1px solid cornflowerblue;
+    border-radius: 3px;
+}
+
+.exceptionGroup .name {
+    font-weight: bold;
+}
+
+.exceptionGroup .count {
+    display: inline-block;
+    float: right;
+}
+
+.exceptionGroupFull {
+    background-color: #b9def0;
+    padding: 5px;
+    border: 1px solid cornflowerblue;
+}
+
+.name {
+    font-size: larger;
+    font-weight: bold;
+}
+
+.exceptionGroupFull .field {
+    font-weight: bold;
+}
+
+.field_container {
+    margin-top: 10px;
+}
+
+
+
+.exceptionGroupStackTrace {
+    margin-top: 20px;
+    background: #b9def0;
+    padding: 5px;
+    border: 1px solid cornflowerblue;
+}
+
+.projectListItem {
+    margin-top: 20px;
+    background: #b9def0;
+    padding: 5px;
+    border: 1px solid cornflowerblue;
+
+}
+
+.projectListItem .name {
+    font-weight: bold;
+}

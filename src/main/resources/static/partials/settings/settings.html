@@ -1,0 +1,17 @@
+<form>
+    <h2>Mail</h2>
+
+    <div class="form-group">
+        <label for="mail.host">SMTP-Host</label>
+        <input class="form-control" type="text" name="mail.host" id="mail.host" ng-model="settings.host"/>
+    </div>
+    <div class="form-group">
+        <label for="mail.username">Username</label>
+        <input class="form-control" type="text" name="mail.username" id="mail.username" ng-model="settings.username"/>
+    </div>
+    <div class="form-group">
+        <label for="mail.password">Password</label>
+        <input class="form-control" type="text" name="mail.password" id="mail.password" ng-model="settings.password"/>
+    </div>
+</form>
+<button type="button" class="btn btn-default" ng-click="saveSettings()">Save</button>

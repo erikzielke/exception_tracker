@@ -1,0 +1,66 @@
+<h2 class="pull-left">Details</h2>
+
+<div class="btn-group pull-right">
+    <div class="btn-group">
+        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">{{exceptionGroup.assigneeName || 'Unassigned' }}<span
+                class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <li ng-repeat="user in users"><a ng-click="setAssignee(user)">{{user.fullName}}</a></li>
+        </ul>
+    </div>
+    <button class="btn btn-default " ng-click="resolveOrUnresolve()">{{exceptionGroup.resolved ? 'Unresolve' :'Resolve'}}</button>
+</div>
+
+<div style="clear: both"></div>
+<div class="exceptionGroupFull">
+
+    <div class="name">{{exceptionGroup.message}}</div>
+    <div class="projectName">{{exceptionGroup.project}}</div>
+
+    <div class="field_container">
+        <div class="field">Class name</div>
+        <div class="value">{{exceptionGroup.className}}</div>
+    </div>
+    <div class="field_container">
+        <div class="field">Method name</div>
+        <div class="value">{{exceptionGroup.methodName}}</div>
+    </div>
+    <div class="field_container">
+        <div class="field">Line Number</div>
+        <div class="value">{{exceptionGroup.lineNumber}}</div>
+    </div>
+</div>
+
+<h2>Stacktrace</h2>
+<div class="exceptionGroupStackTrace">
+    <pre>{{exceptionGroup.stackTrace}}</pre>
+    <div class="btn-group">
+
+        <button class="btn btn-default" ng-click="showIndividualLogs()">Individual logs</button>
+        <button class="btn btn-default" ng-click="showCode()">Show code</button>
+    </div>
+</div>
+
+<h2>Comments</h2>
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th>User</th>
+        <th>Date</th>
+        <th>Comment</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="comment in exceptionGroup.comments">
+        <td>{{comment.username}}</td>
+        <td>{{comment.commentDate}}</td>
+        <td>{{comment.commentText}}</td>
+    </tr>
+    </tbody>
+</table>
+<div>
+    <div class="form-inline">
+        <input type="text" class="form-control" placeholder="Comment" ng-model="comment"/>
+        <button type="button" class="btn btn-default" ng-click="submitComment()">Comment</button>
+    </div>
+</div>

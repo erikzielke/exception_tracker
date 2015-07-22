@@ -1,0 +1,5 @@
+<div ng-repeat="project in projects track by project.id" class="projectListItem" ng-click="showProject(project)">
+    <span class="name">{{project.name}}</span>
+    <button type="button" class="btn btn-default pull-right" ng-click="watchOrUnwatch(project)">{{project.watched ? 'Unwatch' : 'Watch'}}</button>
+    <div class="clearfix"></div>
+</div>

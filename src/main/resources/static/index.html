@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en" ng-app="exceptionTrackerApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Exception Tracker</title>
+
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="bower_components/code-prettify/loader/prettify.css" />
+
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="js/app.js" ></script>
+    <script src="js/controller.js"></script>
+    <script src="js/service.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/code-prettify/loader/prettify.js"></script>
+
+
+</head>
+<body>
+
+<div class="container" ng-controller="MenuController">
+    <ul class="nav nav-pills">
+        <li><a ng-click="showExceptions()">Exceptions</a></li>
+        <li><a ng-click="showProjects()">Projects</a></li>
+        <li><a ng-click="showUsers()">Users</a></li>
+        <li><a ng-click="showSettings()">Settings</a></li>
+    </ul>
+
+    <div  style="margin-top: 1em" ng-view></div>
+</div>
+
+</body>
+</html>
