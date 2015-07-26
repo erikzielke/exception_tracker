@@ -1,7 +1,7 @@
 var exceptionTrackerControllers = angular.module('exceptionTrackerControllers', []);
 
 
-exceptionTrackerControllers.controller('MenuController', ['$scope', '$location','$route', function ($scope, $location, $route) {
+exceptionTrackerControllers.controller('MenuController', ['$scope', '$location','$route','$http','AuthService', function ($scope, $location, $route, $http, AuthService) {
 
     $scope.currentRoute = $route.current;
 
@@ -16,6 +16,15 @@ exceptionTrackerControllers.controller('MenuController', ['$scope', '$location',
     };
     $scope.showSettings = function () {
         $location.path('/settings')
+    };
+    $scope.logout = function() {
+        $http.post('/api/users/logout').success(function (data, status) {
+            if(status == 200) {
+                AuthService.setCurrentUser(null);
+                $location.path('/login')
+            }
+        });
+
     }
 }]);
 

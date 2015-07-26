@@ -27,13 +27,16 @@
 
 <div class="container" ng-controller="MenuController">
     <div class="row">
-        <ul class="nav nav-pills">
+        <ul class="nav nav-pills pull-left">
 
             <li active-link="Exceptions"><a ng-click="showExceptions()">Exceptions</a></li>
             <li active-link="Projects"><a ng-click="showProjects()">Projects</a></li>
             <li active-link="Users"><a ng-click="showUsers()">Users</a></li>
             <li active-link="Settings"><a ng-click="showSettings()">Settings</a></li>
         </ul>
+        <p class="pull-right">
+            <button class="btn btn-danger" ng-click="logout()">Log out</button>
+        </p>
     </div>
     <div style="margin-top: 1em" ng-view></div>
 </div>

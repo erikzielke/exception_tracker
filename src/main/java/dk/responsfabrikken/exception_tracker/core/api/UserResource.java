@@ -55,4 +55,11 @@ public class UserResource {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @RequestMapping("/logout")
+    public HttpEntity<UserDto> logout(HttpServletRequest request) {
+        UserDto user = (UserDto) request.getSession().getAttribute("user");
+        request.getSession().removeAttribute("user");
+        return new ResponseEntity<UserDto>(user, HttpStatus.OK);
+    }
 }
