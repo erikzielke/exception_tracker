@@ -1,4 +1,4 @@
-var exceptionTrackerApp = angular.module("exceptionTrackerApp", ['ngRoute','angularMoment', 'exceptionTrackerControllers', 'exceptionTrackerServices']);
+var exceptionTrackerApp = angular.module("exceptionTrackerApp", ['ngRoute','angularMoment','ui.bootstrap', 'exceptionTrackerControllers', 'exceptionTrackerServices']);
 
 exceptionTrackerApp.config(['$routeProvider', function ($routeProvider) {
     var resolver = function () {

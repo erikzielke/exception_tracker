@@ -5,6 +5,8 @@ import dk.responsfabrikken.exception_tracker.core.model.server.*;
 import dk.responsfabrikken.exception_tracker.core.service.GitFetchService;
 import dk.responsfabrikken.exception_tracker.core.service.QueryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,10 +30,18 @@ public class ExceptionGroupResource {
     @Autowired QueryService queryService;
 
     @RequestMapping
-    public List<ExceptionGroupDto> query() {
-        return exceptionGroupRepository.findAll().stream()
-                .map(ExceptionGroupDto::fromExceptionGroup)
+    public ExceptionSearchResult query(@RequestParam("maxSize") int maxSize, @RequestParam("currentPage") int page) {
+        Page<ExceptionGroup> all = exceptionGroupRepository.findAll(new PageRequest(page-1, maxSize));
+        long totalElements = all.getTotalElements();
+        List<ExceptionGroupDto> collect = all.getContent().stream().map(ExceptionGroupDto::fromExceptionGroup)
                 .collect(toList());
+
+        ExceptionSearchResult exceptionSearchResult = new ExceptionSearchResult();
+        exceptionSearchResult.setData(collect);
+        exceptionSearchResult.setTotalItems(totalElements);
+        exceptionSearchResult.setCurrentPage(page);
+        return exceptionSearchResult;
+
     }
 
     @RequestMapping("/search")

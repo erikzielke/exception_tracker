@@ -2,6 +2,10 @@ var exceptionTrackerServices = angular.module('exceptionTrackerServices', ['ngRe
 
 exceptionTrackerServices.factory('ExceptionGroupService', ['$resource', function ($resource) {
     return $resource('/api/exceptionGroups/:exceptionGroupId/:action?searchString=:searchString&command=:command', {"exceptionGroupId": '@id'}, {
+        query: {
+            isArray: false
+
+        },
         resolve: {
             params: {
                 action: 'resolve'
@@ -84,8 +88,8 @@ exceptionTrackerServices.factory('AuthService', function ($http, $q) {
     authService.currentUser = null;
     authService.hasLoadedUser = false;
 
-    authService.isLoggedIn = function() {
-       return authService.currentUser != null;
+    authService.isLoggedIn = function () {
+        return authService.currentUser != null;
     };
     authService.checkLogin = function () {
         return $q(function (resolve, reject) {
@@ -100,17 +104,17 @@ exceptionTrackerServices.factory('AuthService', function ($http, $q) {
                             loggedIn = false;
                         }
                         authService.hasLoadedUser = true;
-                        if(loggedIn) {
+                        if (loggedIn) {
                             resolve(loggedIn)
                         } else {
                             reject(loggedIn)
                         }
                     })
-                    .error(function(data, status) {
+                    .error(function (data, status) {
                         reject(false);
                     })
             } else {
-                if(loggedIn) {
+                if (loggedIn) {
                     resolve(loggedIn)
                 } else {
                     reject(loggedIn)
@@ -123,8 +127,6 @@ exceptionTrackerServices.factory('AuthService', function ($http, $q) {
     authService.setCurrentUser = function (user) {
         authService.currentUser = user;
     };
-
-
 
 
     return authService;

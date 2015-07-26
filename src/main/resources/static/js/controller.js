@@ -32,10 +32,28 @@ exceptionTrackerControllers.controller('LoginController', ['$scope', '$location'
 }]);
 
 exceptionTrackerControllers.controller('ExceptionGroupListCtrl', ['$scope', '$location', 'ExceptionGroupService', function ($scope, $location, ExceptionGroupService) {
-    $scope.exceptionGroups = ExceptionGroupService.query();
+    $scope.exceptionGroups = [];
+    $scope.bigTotalItems = 1;
+    $scope.bigCurrentPage = 1;
+
+    $scope.result = ExceptionGroupService.query({currentPage: 1, maxSize: 2});
+    $scope.result.$promise.then(function () {
+        $scope.bigTotalItems = $scope.result.totalItems;
+        $scope.exceptionGroups = $scope.result.data;
+    });
     $scope.searchString = '';
+    $scope.maxSize = 10;
+    $scope.itemsPerPage = 2;
+
     $scope.showException = function (exceptionGroup) {
         $location.path('/exception/' + exceptionGroup.id)
+    };
+    $scope.pageChanged = function() {
+        $scope.result = ExceptionGroupService.query({currentPage: $scope.bigCurrentPage, maxSize: 2});
+        $scope.result.$promise.then(function () {
+            $scope.bigTotalItems = $scope.result.totalItems;
+            $scope.exceptionGroups = $scope.result.data;
+        });
     };
     $scope.search = function() {
         $scope.exceptionGroups = ExceptionGroupService.search({searchString: $scope.searchString});
