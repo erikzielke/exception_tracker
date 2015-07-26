@@ -61,6 +61,7 @@ public class IncomingExceptionProcessor {
         ExceptionLog exceptionLog = new ExceptionLog();
         exceptionLog.setExceptionGroup(exceptionGroup);
         exceptionLog.setTimestamp(incomingException.getTimestamp());
+        exceptionLog.setContext(incomingException.getContext());
         exceptionLogRepository.save(exceptionLog);
     }
 }

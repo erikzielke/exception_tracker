@@ -1,5 +1,7 @@
 package dk.responsfabrikken.exception_tracker.core.model.server;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.responsfabrikken.exception_tracker.core.model.client.IncomingExceptionDto;
 
 import javax.persistence.Entity;
@@ -24,6 +26,7 @@ public class IncomingException {
     private String fileName;
     private Date processed;
     private String revision;
+    private String context;
 
     public Long getId() {
         return id;
@@ -113,6 +116,14 @@ public class IncomingException {
         this.revision = revision;
     }
 
+    public String getContext() {
+        return context;
+    }
+
+    public void setContext(String context) {
+        this.context = context;
+    }
+
     public static IncomingException fromDto(IncomingExceptionDto incomingExceptionDto) {
         IncomingException incomingException = new IncomingException();
         incomingException.message = incomingExceptionDto.getMessage();
@@ -123,6 +134,12 @@ public class IncomingException {
         incomingException.lineNumber = incomingExceptionDto.getLineNumber();
         incomingException.fileName = incomingExceptionDto.getFileName();
         incomingException.revision = incomingExceptionDto.getRevision();
+        incomingException.project = incomingExceptionDto.getProject();
+        try {
+            incomingException.context = new ObjectMapper().writeValueAsString(incomingExceptionDto.getLoggingEvents());
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         return incomingException;
     }
 

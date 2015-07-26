@@ -14,3 +14,21 @@
 
 <h2>Stacktrace</h2>
 <pre ng-hide="log == null">{{log.stackTrace}}</pre>
+
+<h2>Context</h2>
+<table class="table table-bordered table-striped" ng-hide="log == null">
+    <thead>
+    <tr>
+        <th>Timestamp</th>
+        <th>Level</th>
+        <th>Message</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="logEvent in log.context">
+        <td>{{logEvent.timestamp}}</td>
+        <td>{{logEvent.level}}</td>
+        <td>{{logEvent.message}}</td>
+    </tr>
+    </tbody>
+</table>

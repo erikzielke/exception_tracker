@@ -13,6 +13,7 @@ public class ExceptionLog {
     @ManyToOne
     private ExceptionGroup exceptionGroup;
     private long timestamp;
+    private String context;
 
     public Long getId() {
         return id;
@@ -36,5 +37,13 @@ public class ExceptionLog {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getContext() {
+        return context;
+    }
+
+    public void setContext(String context) {
+        this.context = context;
     }
 }

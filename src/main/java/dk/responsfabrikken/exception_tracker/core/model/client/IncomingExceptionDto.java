@@ -1,5 +1,8 @@
 package dk.responsfabrikken.exception_tracker.core.model.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class IncomingExceptionDto {
     private String message;
     private String[] stackTrace;
@@ -9,7 +12,12 @@ public class IncomingExceptionDto {
     private String lineNumber;
     private String fileName;
     private String revision;
+    private String project;
+    private List<LoggingEventDto> loggingEvents;
 
+    public IncomingExceptionDto() {
+        loggingEvents = new ArrayList<>();
+    }
 
     public String getMessage() {
         return message;
@@ -73,5 +81,21 @@ public class IncomingExceptionDto {
 
     public void setRevision(String revision) {
         this.revision = revision;
+    }
+
+    public String getProject() {
+        return project;
+    }
+
+    public void setProject(String project) {
+        this.project = project;
+    }
+
+    public List<LoggingEventDto> getLoggingEvents() {
+        return loggingEvents;
+    }
+
+    public void setLoggingEvents(List<LoggingEventDto> loggingEvents) {
+        this.loggingEvents = loggingEvents;
     }
 }
