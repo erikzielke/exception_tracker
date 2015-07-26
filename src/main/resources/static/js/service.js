@@ -1,7 +1,7 @@
 var exceptionTrackerServices = angular.module('exceptionTrackerServices', ['ngResource']);
 
 exceptionTrackerServices.factory('ExceptionGroupService', ['$resource', function ($resource) {
-    return $resource('/api/exceptionGroups/:exceptionGroupId/:action', {"exceptionGroupId": '@id'}, {
+    return $resource('/api/exceptionGroups/:exceptionGroupId/:action?searchString=:searchString&command=:command', {"exceptionGroupId": '@id'}, {
         resolve: {
             params: {
                 action: 'resolve'
@@ -28,6 +28,20 @@ exceptionTrackerServices.factory('ExceptionGroupService', ['$resource', function
             method: 'GET',
             params: {
                 action: 'code'
+            }
+        },
+        search: {
+            method: 'GET',
+            isArray: true,
+            params: {
+                action: 'search'
+            }
+        },
+        completions: {
+            method: 'GET',
+            isArray: true,
+            params: {
+                action: 'completions'
             }
         }
     });

@@ -1,17 +1,16 @@
 package dk.responsfabrikken.exception_tracker.core.api;
 
-import dk.responsfabrikken.exception_tracker.core.model.client.CodeDto;
-import dk.responsfabrikken.exception_tracker.core.model.client.CommentDto;
-import dk.responsfabrikken.exception_tracker.core.model.client.ExceptionGroupDto;
-import dk.responsfabrikken.exception_tracker.core.model.client.UserDto;
+import dk.responsfabrikken.exception_tracker.core.model.client.*;
 import dk.responsfabrikken.exception_tracker.core.model.server.*;
 import dk.responsfabrikken.exception_tracker.core.service.GitFetchService;
+import dk.responsfabrikken.exception_tracker.core.service.QueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -25,12 +24,25 @@ public class ExceptionGroupResource {
     @Autowired UserRepository userRepository;
     @Autowired CommentRepository commentRepository;
     @Autowired GitFetchService gitFetchService;
+    @Autowired ProjectRepository projectRepository;
+    @Autowired QueryService queryService;
 
     @RequestMapping
     public List<ExceptionGroupDto> query() {
         return exceptionGroupRepository.findAll().stream()
                 .map(ExceptionGroupDto::fromExceptionGroup)
                 .collect(toList());
+    }
+
+    @RequestMapping("/search")
+    public List<ExceptionGroupDto> search(@RequestParam("searchString") String searchString, HttpServletRequest request) {
+        UserDto user = (UserDto) request.getSession().getAttribute("user");
+        return queryService.search(searchString, user);
+    }
+
+    @RequestMapping("/completions")
+    public List<SuggestionDto> completions(@RequestParam("command") String command, @RequestParam("caret") int caret) {
+        return queryService.calculateSuggestions(command, caret);
     }
 
     @RequestMapping("/{exceptionGroupId}/resolve")
@@ -90,6 +102,8 @@ public class ExceptionGroupResource {
         ExceptionGroup one = exceptionGroupRepository.findOne(exceptionGroupId);
         return ExceptionGroupDto.fromExceptionFullGroup(one);
     }
+
+
 
     private ExceptionGroupDto setStatus(@PathVariable("exceptionGroupId") long exceptionGroupId, ExceptionGroupStatus status) {
         ExceptionGroup exceptionGroup = exceptionGroupRepository.findOne(exceptionGroupId);

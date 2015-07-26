@@ -11,6 +11,7 @@ public class User {
     @GeneratedValue
     @Id
     private Long id;
+    private String shortName;
     private String fullName;
     private String email;
     private String password;
@@ -27,6 +28,7 @@ public class User {
 
     public static User fromUserDto(UserDto userDto) {
         User user = new User();
+        user.setShortName(userDto.getShortName());
         user.setFullName(userDto.getFullName());
         user.setEmail(userDto.getEmail());
         user.setPassword(userDto.getPassword());
@@ -39,6 +41,14 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
     public String getFullName() {

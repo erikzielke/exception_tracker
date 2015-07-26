@@ -33,9 +33,13 @@ exceptionTrackerControllers.controller('LoginController', ['$scope', '$location'
 
 exceptionTrackerControllers.controller('ExceptionGroupListCtrl', ['$scope', '$location', 'ExceptionGroupService', function ($scope, $location, ExceptionGroupService) {
     $scope.exceptionGroups = ExceptionGroupService.query();
+    $scope.searchString = '';
     $scope.showException = function (exceptionGroup) {
         $location.path('/exception/' + exceptionGroup.id)
     };
+    $scope.search = function() {
+        $scope.exceptionGroups = ExceptionGroupService.search({searchString: $scope.searchString});
+    }
 }]);
 
 exceptionTrackerControllers.controller('ExceptionShowCtrl', ['$scope', '$routeParams', '$location', 'ExceptionGroupService', 'UserService', function ($scope, $routeParams, $location, ExceptionGroupService, UserService) {

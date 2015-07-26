@@ -116,3 +116,56 @@ exceptionTrackerApp.directive('activeLink', ['$route','$rootScope', function ($r
         }
     }
 }]);
+
+
+exceptionTrackerApp.directive('queryBox', ['$route','$timeout','ExceptionGroupService', function ($route, $timeout, ExceptionGroupService) {
+    return {
+        restrict: 'C',
+        templateUrl: 'templates/queryBox.html',
+        link: function($scope, element, attrs) {
+
+            function getPos(element) {
+                if ('selectionStart' in element) {
+                    return element.selectionStart;
+                } else if (document.selection) {
+                    element.focus();
+                    var sel = document.selection.createRange();
+                    var selLen = document.selection.createRange().text.length;
+                    sel.moveStart('character', -element.value.length);
+                    return sel.text.length - selLen;
+                }
+            }
+
+            $scope.queryBoxFocus = function () {
+                $scope.queryBoxFocused = true;
+            };
+            $scope.queryBoxBlur = function() {
+                $timeout(function() {
+                    $scope.queryBoxFocused = false;
+                }, 100)
+
+            };
+            $scope.handleInput = function (event) {
+                $scope.data = ExceptionGroupService.completions({command: $scope.searchString, caret: getPos(event.srcElement)});
+            };
+            $scope.elementClick = function(element) {
+                var completionStart = element.completionStart;
+                var completionEnd = element.completionEnd;
+                $scope.searchString = $scope.searchString.substr(0, completionStart) + element.option + $scope.searchString.substr(completionEnd);
+
+            };
+            $scope.handleTab = function(event) {
+                if(event.keyCode == 9) {
+                    event.preventDefault();
+                    var data = $scope.data[0];
+                    var completionStart = data.completionStart;
+                    var completionEnd = data.completionEnd;
+                    $scope.searchString = $scope.searchString.substr(0, completionStart) + data.option + $scope.searchString.substr(completionEnd);
+                } else if (event.keyCode == 40) {
+                    var find = element.find('ul').children()[0];
+                    find.focus()
+                }
+            }
+        }
+    }
+}]);

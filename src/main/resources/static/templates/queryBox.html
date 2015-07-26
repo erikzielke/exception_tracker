@@ -1,0 +1,12 @@
+<div class="input-group">
+    <input type="text" class="form-control" ng-focus="queryBoxFocus()" ng-blur="queryBoxBlur()"
+           placeholder="Search query" ng-model="searchString" ng-keyup="handleInput($event)" ng-keydown="handleTab($event)"/>
+    <span class="input-group-btn">
+        <button class="btn btn-default" type="button" ng-click="search()">Search</button>
+    </span>
+</div>
+<div ng-show="queryBoxFocused"  class="dropdown open" >
+    <ul class="dropdown-menu">
+        <li ng-repeat="item in data"><a  ng-click="elementClick(item)">{{item.option}}</a></li>
+    </ul>
+</div>

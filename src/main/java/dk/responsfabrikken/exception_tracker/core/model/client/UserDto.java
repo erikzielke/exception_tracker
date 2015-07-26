@@ -9,6 +9,7 @@ public class UserDto implements Serializable {
     private String email;
     private String password;
     private String fullName;
+    private String shortName;
 
     public static UserDto fromUser(User user) {
         UserDto userDto = new UserDto();
@@ -48,5 +49,13 @@ public class UserDto implements Serializable {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 }

@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <title>Exception Tracker</title>
 
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="css/style.css?v=1" />
-    <link rel="stylesheet" href="bower_components/code-prettify/loader/prettify.css" />
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
+    <link rel="stylesheet" href="css/style.css?v=1"/>
+    <link rel="stylesheet" href="bower_components/code-prettify/loader/prettify.css"/>
 
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
@@ -14,7 +14,7 @@
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/moment/moment.js"></script>
     <script src="bower_components/angular-moment/angular-moment.js"></script>
-    <script src="js/app.js" ></script>
+    <script src="js/app.js"></script>
     <script src="js/controller.js"></script>
     <script src="js/service.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
@@ -25,16 +25,16 @@
 <body>
 
 <div class="container" ng-controller="MenuController">
-    <h1>{{$route.current.menuItem}}</h1>
-    <ul class="nav nav-pills">
+    <div class="row">
+        <ul class="nav nav-pills">
 
-        <li active-link="Exceptions"><a ng-click="showExceptions()">Exceptions</a></li>
-        <li active-link="Projects"><a ng-click="showProjects()" >Projects</a></li>
-        <li active-link="Users"><a ng-click="showUsers()" >Users</a></li>
-        <li active-link="Settings"><a ng-click="showSettings()" >Settings</a></li>
-    </ul>
-
-    <div  style="margin-top: 1em" ng-view></div>
+            <li active-link="Exceptions"><a ng-click="showExceptions()">Exceptions</a></li>
+            <li active-link="Projects"><a ng-click="showProjects()">Projects</a></li>
+            <li active-link="Users"><a ng-click="showUsers()">Users</a></li>
+            <li active-link="Settings"><a ng-click="showSettings()">Settings</a></li>
+        </ul>
+    </div>
+    <div style="margin-top: 1em" ng-view></div>
 </div>
 
 </body>
