@@ -14,6 +14,7 @@ public class ExceptionLogDto {
     private long id;
     private long timestamp;
     private String stackTrace;
+    private boolean hasCode;
     private List<LoggingEventDto> context;
 
 
@@ -32,6 +33,7 @@ public class ExceptionLogDto {
             }
 
         }
+        exceptionLogDto.setHasCode(one.getProject().getRepositoryUrl() != null);
         return exceptionLogDto;
     }
 
@@ -65,5 +67,13 @@ public class ExceptionLogDto {
 
     public void setContext(List<LoggingEventDto> context) {
         this.context = context;
+    }
+
+    public boolean isHasCode() {
+        return hasCode;
+    }
+
+    public void setHasCode(boolean hasCode) {
+        this.hasCode = hasCode;
     }
 }
