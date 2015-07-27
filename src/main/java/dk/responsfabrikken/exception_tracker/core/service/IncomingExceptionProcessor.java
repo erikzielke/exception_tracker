@@ -2,7 +2,7 @@ package dk.responsfabrikken.exception_tracker.core.service;
 
 import dk.responsfabrikken.exception_tracker.core.model.server.*;
 import dk.responsfabrikken.exception_tracker.core.service.exceptiongroup.ExceptionGroupListeners;
-import dk.responsfabrikken.exception_tracker.core.service.exceptiongroup.NewExceptionGroupListener;
+import dk.responsfabrikken.exception_tracker.core.service.exceptiongroup.NotificationListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,13 +49,20 @@ public class IncomingExceptionProcessor {
             exceptionGroup.setExceptionGroupStatus(ExceptionGroupStatus.UNRESOLVED);
             exceptionGroup.setRevision(incomingException.getRevision());
             exceptionGroupRepository.save(exceptionGroup);
-            for (NewExceptionGroupListener newExceptionGroupListener : exceptionGroupListeners.getListeners()) {
+            for (NotificationListener newExceptionGroupListener : exceptionGroupListeners.getListeners()) {
                 newExceptionGroupListener.onNewExceptionGroupAdded(exceptionGroup);
             }
         } else {
             exceptionGroup.setRevision(incomingException.getRevision());
+            ExceptionGroupStatus oldStatus = exceptionGroup.getExceptionGroupStatus();
             exceptionGroup.setExceptionGroupStatus(ExceptionGroupStatus.UNRESOLVED);
             exceptionGroupRepository.save(exceptionGroup);
+            if (oldStatus == ExceptionGroupStatus.RESOLVED) {
+                List<NotificationListener> listeners = exceptionGroupListeners.getListeners();
+                for (NotificationListener listener : listeners) {
+                    listener.onExceptionGroupRegression(exceptionGroup);
+                }
+            }
         }
 
         ExceptionLog exceptionLog = new ExceptionLog();
@@ -63,5 +70,10 @@ public class IncomingExceptionProcessor {
         exceptionLog.setTimestamp(incomingException.getTimestamp());
         exceptionLog.setContext(incomingException.getContext());
         exceptionLogRepository.save(exceptionLog);
+
+        List<NotificationListener> listeners = exceptionGroupListeners.getListeners();
+        for (NotificationListener listener : listeners) {
+            listener.onNewExceptionGroupLog(exceptionGroup, exceptionGroup);
+        }
     }
 }

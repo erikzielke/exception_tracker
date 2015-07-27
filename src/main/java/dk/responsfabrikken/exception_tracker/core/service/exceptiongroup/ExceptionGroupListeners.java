@@ -11,7 +11,7 @@ import java.util.List;
 public class ExceptionGroupListeners {
     @Autowired MailNotifier mailNotifier;
 
-    public List<NewExceptionGroupListener> getListeners() {
+    public List<NotificationListener> getListeners() {
         return Collections.singletonList(mailNotifier);
     }
 }

@@ -45,14 +45,14 @@ exceptionTrackerControllers.controller('ExceptionGroupListCtrl', ['$scope', '$lo
     $scope.bigTotalItems = 1;
     $scope.bigCurrentPage = 1;
 
-    $scope.result = ExceptionGroupService.query({currentPage: 1, maxSize: 2});
+    $scope.result = ExceptionGroupService.query({currentPage: 1, maxSize: 10});
     $scope.result.$promise.then(function () {
         $scope.bigTotalItems = $scope.result.totalItems;
         $scope.exceptionGroups = $scope.result.data;
     });
     $scope.searchString = '';
     $scope.maxSize = 10;
-    $scope.itemsPerPage = 2;
+    $scope.itemsPerPage = 10;
 
     $scope.showException = function (exceptionGroup) {
         $location.path('/exception/' + exceptionGroup.id)

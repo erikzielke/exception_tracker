@@ -1,0 +1,33 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>New Exception Group</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1>New Exception Group</h1>
+<h2 th:text="${exceptionGroup.message}">RuntimeException</h2>
+<h3 th:text="${exceptionGroup.project.name}">Project Name</h3>
+<h4>Stacktrace</h4>
+<pre th:text="${exceptionGroup.stackTrace}">
+
+</pre>
+<h4>Context</h4>
+<table>
+    <thead>
+    <tr>
+        <th>Level</th>
+        <th>Time</th>
+        <th>Message</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="log : ${logs}" >
+        <td th:text="${log.level}"></td>
+        <td th:text="${#dates.format(log.date,'dd-MMM-yyyy HH:mm:ss.S')}"></td>
+        <td th:text="${log.message}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

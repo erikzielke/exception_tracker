@@ -7,6 +7,7 @@ import dk.responsfabrikken.exception_tracker.core.model.server.ExceptionGroup;
 import dk.responsfabrikken.exception_tracker.core.model.server.ExceptionLog;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 public class ExceptionLogDto {
@@ -14,6 +15,7 @@ public class ExceptionLogDto {
     private long timestamp;
     private String stackTrace;
     private List<LoggingEventDto> context;
+
 
     public static ExceptionLogDto fromExceptionLog(ExceptionGroup one, ExceptionLog exceptionLog) {
         ExceptionLogDto exceptionLogDto = new ExceptionLogDto();

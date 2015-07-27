@@ -1,9 +1,15 @@
 package dk.responsfabrikken.exception_tracker.core.model.client;
 
+import java.util.Date;
+
 public class LoggingEventDto {
     private String message;
     private long timestamp;
     private String level;
+
+    public Date getDate() {
+        return new Date(timestamp);
+    }
 
 
     public String getMessage() {

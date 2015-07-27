@@ -28,6 +28,7 @@ public class SettingsResource {
         settings.setHost(settingsDto.getHost());
         settings.setUsername(settingsDto.getUsername());
         settings.setPassword(settingsDto.getPassword());
+        settings.setPort(settingsDto.getPort());
         settingsRepository.save(settings);
     }
 

@@ -6,6 +6,7 @@ public class SettingsDto {
     private String host;
     private String username;
     private String password;
+    private int port;
 
     public String getHost() {
         return host;
@@ -31,11 +32,20 @@ public class SettingsDto {
         this.password = password;
     }
 
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
     public static SettingsDto fromSettings(Settings settings) {
         SettingsDto settingsDto = new SettingsDto();
         settingsDto.setHost(settings.getHost());
         settingsDto.setUsername(settings.getUsername());
         settingsDto.setPassword(settings.getPassword());
+        settingsDto.setPort(settings.getPort());
         return settingsDto;
     }
 }

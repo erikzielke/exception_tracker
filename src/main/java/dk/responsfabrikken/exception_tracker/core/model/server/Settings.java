@@ -12,6 +12,7 @@ public class Settings {
     private String host;
     private String username;
     private String password;
+    private int port;
 
     public long getId() {
         return id;
@@ -43,5 +44,13 @@ public class Settings {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 }

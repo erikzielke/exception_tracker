@@ -4,6 +4,7 @@ import dk.responsfabrikken.exception_tracker.core.model.client.*;
 import dk.responsfabrikken.exception_tracker.core.model.server.*;
 import dk.responsfabrikken.exception_tracker.core.service.GitFetchService;
 import dk.responsfabrikken.exception_tracker.core.service.QueryService;
+import dk.responsfabrikken.exception_tracker.core.service.exceptiongroup.ExceptionGroupListeners;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,10 +12,7 @@ import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import static java.util.stream.Collectors.toList;
 
@@ -28,10 +26,11 @@ public class ExceptionGroupResource {
     @Autowired GitFetchService gitFetchService;
     @Autowired ProjectRepository projectRepository;
     @Autowired QueryService queryService;
+    @Autowired ExceptionGroupListeners listeners;
 
     @RequestMapping
     public ExceptionSearchResult query(@RequestParam("maxSize") int maxSize, @RequestParam("currentPage") int page) {
-        Page<ExceptionGroup> all = exceptionGroupRepository.findAll(new PageRequest(page-1, maxSize));
+        Page<ExceptionGroup> all = exceptionGroupRepository.findAll(new PageRequest(page - 1, maxSize));
         long totalElements = all.getTotalElements();
         List<ExceptionGroupDto> collect = all.getContent().stream().map(ExceptionGroupDto::fromExceptionGroup)
                 .collect(toList());
@@ -77,6 +76,7 @@ public class ExceptionGroupResource {
         comment.setText(commentDto.getCommentText());
         comment.setUser(one);
         commentRepository.save(comment);
+        listeners.getListeners().forEach(l -> l.onExceptionGroupCommented(exceptionGroup, comment));
         return CommentDto.fromComment(comment);
     }
 
@@ -84,8 +84,10 @@ public class ExceptionGroupResource {
     public ExceptionGroupDto assignee(@PathVariable("exceptionGroupId") long exceptionGroupId, @RequestBody UserDto userDto) {
         User user = userRepository.findOne(userDto.getId());
         ExceptionGroup group = exceptionGroupRepository.findOne(exceptionGroupId);
+        User assignee = group.getAssignee();
         group.setAssignee(user);
         exceptionGroupRepository.save(group);
+        listeners.getListeners().forEach(l -> l.onExceptionGroupAssigneeChanged(group, assignee, user));
         return ExceptionGroupDto.fromExceptionFullGroup(group);
     }
 
@@ -101,7 +103,7 @@ public class ExceptionGroupResource {
         CodeDto codeDto = new CodeDto();
         codeDto.setLine(Integer.parseInt(one.getLineNumber()));
         String path = ClassUtils.convertClassNameToResourcePath(one.getClassName());
-        path = path.substring(0,path.lastIndexOf("/"));
+        path = path.substring(0, path.lastIndexOf("/"));
         String code = gitFetchService.getCode(one, "src/main/java/" + path + "/" + one.getFileName());
         codeDto.setCode(code);
         return codeDto;
@@ -114,11 +116,18 @@ public class ExceptionGroupResource {
     }
 
 
-
     private ExceptionGroupDto setStatus(@PathVariable("exceptionGroupId") long exceptionGroupId, ExceptionGroupStatus status) {
         ExceptionGroup exceptionGroup = exceptionGroupRepository.findOne(exceptionGroupId);
+        ExceptionGroupStatus oldStatus = exceptionGroup.getExceptionGroupStatus();
         exceptionGroup.setExceptionGroupStatus(status);
         exceptionGroupRepository.save(exceptionGroup);
+        if (oldStatus != exceptionGroup.getExceptionGroupStatus()) {
+            if (exceptionGroup.getExceptionGroupStatus() == ExceptionGroupStatus.RESOLVED) {
+                listeners.getListeners().forEach(l -> l.onExceptionGroupResolved(exceptionGroup));
+            } else if (exceptionGroup.getExceptionGroupStatus() == ExceptionGroupStatus.UNRESOLVED) {
+                listeners.getListeners().forEach(l -> l.onExceptionGroupRegression(exceptionGroup));
+            }
+        }
         return ExceptionGroupDto.fromExceptionFullGroup(exceptionGroup);
     }
 }
