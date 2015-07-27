@@ -10,7 +10,15 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,6 +29,7 @@ import static java.util.stream.Collectors.toList;
 public class QueryService {
     @Autowired EntityManager entityManager;
     @Autowired ProjectRepository projectRepository;
+    @Autowired ExceptionLogRepository exceptionLogRepository;
     @Autowired UserRepository userRepository;
 
     public List<SuggestionDto> calculateSuggestions(String command, int caret) {
@@ -40,6 +49,12 @@ public class QueryService {
             suggestionDto.setOption("for:" + user.getShortName());
             suggestionDtos.add(suggestionDto);
         }
+
+        addBasic(suggestionDtos, "orderby:instance-count");
+        addBasic(suggestionDtos, "orderby:project");
+        addBasic(suggestionDtos, "orderby:assignee");
+
+        addBasic(suggestionDtos, "logAt:");
 
         addBasic(suggestionDtos, "#Resolved");
         addBasic(suggestionDtos, "#Unresolved");
@@ -72,7 +87,7 @@ public class QueryService {
         }
     }
 
-    public List<ExceptionGroupDto> search(String searchString, UserDto user) {
+    public List<ExceptionGroupDto> search(String searchString, UserDto user)  {
 
         List<String> projectNames = findProjects(searchString);
         List<String> userShortNames = findUsers(searchString);
@@ -94,6 +109,8 @@ public class QueryService {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<ExceptionGroup> query = criteriaBuilder.createQuery(ExceptionGroup.class);
         Root<ExceptionGroup> root = query.from(ExceptionGroup.class);
+
+        List<String> orders = findOrders(searchString);
 
 
         List<Predicate> predicates = new ArrayList<>();
@@ -117,8 +134,50 @@ public class QueryService {
             predicates.add(predicate);
         }
 
+
+
         query.where(predicates.toArray(new Predicate[predicates.size()]));
+
+        List<Order> orderList = new ArrayList<>();
+        if (!orders.isEmpty()) {
+            for (String order : orders) {
+                if (order.equals("instance-count")) {
+                    orderList.add(criteriaBuilder.desc(criteriaBuilder.size(root.get("logs"))));
+                } else if (order.equals("project")) {
+                    orderList.add(criteriaBuilder.asc(root.get("project").get("name")));
+                } else if (order.equals("assignee")) {
+                    orderList.add(criteriaBuilder.asc(root.get("assignee").get("fullName")));
+                }
+            }
+            query.orderBy(orderList);
+        }
         List<ExceptionGroup> resultList = entityManager.createQuery(query.select(root)).getResultList();
+
+        List<String> logsAt = logsAt(searchString);
+        if (!logsAt.isEmpty()) {
+            CriteriaBuilder logCriteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<ExceptionGroup> criteriaQuery = logCriteriaBuilder.createQuery(ExceptionGroup.class);
+            Root<ExceptionGroup> groupRoot = criteriaQuery.from(ExceptionGroup.class);
+            Join<Object, Object> join = groupRoot.join("logs");
+
+            List<Predicate> timePredicates = new ArrayList<>();
+            for (String s : logsAt) {
+                LocalDate localDate = LocalDate.parse(s, DateTimeFormatter.ofPattern("yyyyMMdd"));
+                long start = localDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
+                long end = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()).plusDays(1)).toEpochMilli();
+                Predicate predicate = criteriaBuilder.and(
+                        criteriaBuilder.ge(join.get("timestamp"), start),
+                        criteriaBuilder.le(join.get("timestamp"), end)
+                );
+                timePredicates.add(predicate);
+            }
+            criteriaQuery.distinct(true);
+            criteriaQuery.where(criteriaBuilder.or(timePredicates.toArray(new Predicate[timePredicates.size()])));
+            List<ExceptionGroup> toKeep = entityManager.createQuery(criteriaQuery.select(groupRoot)).getResultList();
+            resultList.retainAll(toKeep);
+            System.out.println(toKeep);
+        }
+
 
         return resultList.stream().map(ExceptionGroupDto::fromExceptionGroup).collect(toList());
     }
@@ -134,13 +193,33 @@ public class QueryService {
     }
 
     private List<String> findProjects(String searchString) {
-        Pattern pattern = Pattern.compile("project:(.*)");
+        Pattern pattern = Pattern.compile("(project:(.*?)( |$))");
         Matcher matcher = pattern.matcher(searchString);
         List<String> projectNames = new ArrayList<>();
         while (matcher.find()) {
             projectNames.add(matcher.group(1));
         }
         return projectNames;
+    }
+
+    private List<String> findOrders(String searchString) {
+        Pattern pattern = Pattern.compile("(orderby:(.*?)( |$))");
+        Matcher matcher = pattern.matcher(searchString);
+        List<String> projectNames = new ArrayList<>();
+        while (matcher.find()) {
+            projectNames.add(matcher.group(2));
+        }
+        return projectNames;
+    }
+
+    private List<String> logsAt(String searchString) {
+        Pattern pattern = Pattern.compile("(logAt:(.*?)( |$))");
+        Matcher matcher = pattern.matcher(searchString);
+        List<String> logsAt = new ArrayList<>();
+        while (matcher.find()) {
+            logsAt.add(matcher.group(2));
+        }
+        return logsAt;
     }
 
 
